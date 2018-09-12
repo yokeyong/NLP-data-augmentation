@@ -52,8 +52,25 @@ of the next word given the previous sequence.
 
 
 ## Input
+Takes in a CSV file with mutually exclusive, numerical labels and text
+input. The arguments for the Augment object are as follows:
 
-## Augmentating data
+```Augment(method, source_path, target_path, corpus_='none',
+valid_tags=['NN'], threshold=0.75, x_col='tweet', y_col='class')```
+
+- ```method```: Which of the three augmentation methods should be used
+- (valid args: 'threshold', 'postag', 'generate')
+- ```source_path```: Path of the input csv file (type: string)
+- ```target_path```: Path of the output csv file (type: string)
+- ```corpus```: Text corpus of pre-trained word embeddings that should
+- be used (valid args: 'google', 'glove', 'fasttext')
+- ```valid_tags```: POS-tags of words that should be replaced in the
+- POS-tag based method (type: list of strings)
+- ```threshold```: Threshold hyperparameter when threshold-based
+- augmentation is used (type: float)
+- ```x_col```: Column name of the samples in input CSV file (type: string)
+- ```y_col```: Column name of the labels in input CSV file (type: string)
+
 
 
 
