@@ -63,11 +63,11 @@ input. The arguments for the Augment object are as follows:
 - ```source_path```: Path of the input csv file (type: string)
 - ```target_path```: Path of the output csv file (type: string)
 - ```corpus```: Text corpus of pre-trained word embeddings that should
-- be used (valid args: 'google', 'glove', 'fasttext')
+  be used (valid args: 'google', 'glove', 'fasttext')
 - ```valid_tags```: POS-tags of words that should be replaced in the
-- POS-tag based method (type: list of strings)
+  POS-tag based method (type: list of strings)
 - ```threshold```: Threshold hyperparameter when threshold-based
-- augmentation is used (type: float)
+  augmentation is used (type: float)
 - ```x_col```: Column name of the samples in input CSV file (type: string)
 - ```y_col```: Column name of the labels in input CSV file (type: string)
 
