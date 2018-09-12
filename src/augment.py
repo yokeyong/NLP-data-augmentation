@@ -13,7 +13,7 @@ class Augment():
                  source_path,
                  target_path,
                  corpus_='none',
-                 pos_tags=['NN'],
+                 valid_tags=['NN'],
                  threshold=0.75,
                  x_col='tweet',
                  y_col='class'):
@@ -33,7 +33,7 @@ class Augment():
         self.df=pd.read_csv(source_path)
         self.augmented=pd.DataFrame(columns=[x_col, y_col])
         self.method=method
-        self.pos_tags = pos_tags
+        self.valid_tags = valid_tags
         self.threshold_ = threshold
         # Go through each row in dataframe
         if method != 'generate': 
@@ -41,7 +41,7 @@ class Augment():
                 x = self.preprocess(row[self.x_col])
                 y = row[self.y_col]
                 if method =='postag':
-                    aug_temp = self.postag(x, y, augmented)
+                    aug_temp = self.postag(x)
                 if method =='threshold':
                     aug_temp = self.threshold(x)
 
@@ -64,13 +64,33 @@ class Augment():
         print('placeholder')
 
     def postag(self, x):
-        print('placeholder') 
+        n = 0
+        dict = {}
+        tags = pos_tag(x)
+        for idx, word in enumerate(x):
+            if tags[idx][1] in self.valid_tags and word in self.model.wv.vocab:
+                replacements = self.model.wv.most_similar(positive=word, topn=3)
+                replacements = [elem[0] for elem in replacements]
+                dict.update({word:replacements})
+                n = len(replacements) if len(replacements) > n else n
+        return self.create_augmented_samples(dict, n, x)
+
+    def create_augmented_samples(self, dict, n, x):
+        aug_tweets = [x]
+        for i in range(n):
+            single_augment = x[:]
+            for idx, word in enumerate(single_augment):
+                if word in dict.keys() and len(dict[word]) >= i+1:
+                    single_augment[idx] = dict[word][i]
+            single_augment = ' '.join(single_augment)
+            aug_tweets.append(single_augment)
+        print(aug_tweets)
+        return aug_tweets
     
         
     def threshold(self, x):
         dict = {}
         n = 0
-        aug_tweets = [x]
         tags = pos_tag(x)
         for idx, word in enumerate(x):
             if word in self.model.wv.vocab:
@@ -82,18 +102,9 @@ class Augment():
                 replacements = [elem for elem in replacements if pos_tag([elem.lower()])[0][1] == tags[idx][1]]
                 dict.update({word:replacements}) if len(replacements) > 0 else dict
                 n = len(replacements) if len(replacements) > n else n
-        for i in range(n):
-            single_augment=x[:]
-            for idx, word in enumerate(single_augment):
-                if word in dict.keys() and len(dict[word]) >= i+1:
-                    single_augment[idx] = dict[word][i]
-            single_augment = ' '.join(single_augment)
-            aug_tweets.append(single_augment)
-        print(aug_tweets) 
-        return aug_tweets
-    
+        return self.create_augmented_samples(dict, n, x)
 
 
 
 if __name__ == '__main__':
-    Augment('threshold', 'preprocessed_data.csv', 'augmented_data.csv', 'google')
+    Augment('postag', 'preprocessed_data.csv', 'augmented_data.csv', 'google')
