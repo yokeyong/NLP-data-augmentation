@@ -55,8 +55,8 @@ of the next word given the previous sequence.
 Takes in a CSV file with mutually exclusive, numerical labels and text
 input. The arguments for the Augment object are as follows:
 
-```Augment(method, source_path, target_path, corpus_='none',
-valid_tags=['NN'], threshold=0.75, x_col='tweet', y_col='class')```
+```Augment(method, source_path, target_path, corpus_='none',```
+```valid_tags=['NN'], threshold=0.75, x_col='tweet', y_col='class')```
 
 - ```method```: Which of the three augmentation methods should be used
 - (valid args: 'threshold', 'postag', 'generate')
