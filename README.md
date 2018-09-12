@@ -59,7 +59,7 @@ input. The arguments for the Augment object are as follows:
 ```valid_tags=['NN'], threshold=0.75, x_col='tweet', y_col='class')```
 
 - ```method```: Which of the three augmentation methods should be used
-- (valid args: 'threshold', 'postag', 'generate')
+  (valid args: 'threshold', 'postag', 'generate')
 - ```source_path```: Path of the input csv file (type: string)
 - ```target_path```: Path of the output csv file (type: string)
 - ```corpus```: Text corpus of pre-trained word embeddings that should
