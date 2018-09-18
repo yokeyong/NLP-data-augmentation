@@ -1,8 +1,9 @@
 # NLP data augmentation
 
-This repository was created as part of my Master's Thesis on NLP at
+This repository consists of code snippets that were created as part of 
+was created as part of my Master's Thesis on NLP at
 Imperial College London. This project allows for three different
-techniques for augmentation of text data
+techniques to augment text data. 
 
 ## Installation
 
