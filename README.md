@@ -1,6 +1,6 @@
 # NLP data augmentation
 
-This repository consists of code snippets that were created as part of my Master's Thesis on NLP at Imperial College London. This project allows for three different techniques to augment text data. 
+This repository consists of code snippets that were created as part of my Master's Thesis on NLP at Imperial College London. This project allows for three different techniques to augment text data.
 
 ## Installation
 
@@ -17,7 +17,7 @@ the files automatically, run the shell script ```./pretrained_vectors.sh```
 
 
 To download the pretrained vectors manually, save the following files
-in the ```src/``` directory. 
+in the ```src/``` directory.
 - [Google News
 Corpus](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit)
 - extract to a ```.bin``` file
@@ -25,7 +25,7 @@ Corpus](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit)
 download ```crawl-300d-2M.vec.zip``` and extract to a ```.vec``` file
 - [GloVe](https://nlp.stanford.edu/projects/glove/) - download the
 ```glove.42B.300d.zip``` file and extract to a .txt file containing
-the vectors (util for this in ```augment.py```). 
+the vectors (util for this in ```augment.py```).
 
 
 
@@ -42,11 +42,11 @@ Replaces all words of a given POS-tag (given as argument) in the
 sentence with their most similar word vector from a large pre-trained
 word embedding.
 
-### Generative
+### Generative (work in progress)
 Trains a two-layer LSTM network to learn the word representations of
 given class. The network then generates new samples of the class by
 initialising a random start word and following the LSTM's predictions
-of the next word given the previous sequence. 
+of the next word given the previous sequence.
 
 
 ## Input
@@ -68,7 +68,3 @@ input. The arguments for the Augment object are as follows:
   augmentation is used (type: float)
 - ```x_col```: Column name of the samples in input CSV file (type: string)
 - ```y_col```: Column name of the labels in input CSV file (type: string)
-
-
-
-

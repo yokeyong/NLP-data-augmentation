@@ -19,13 +19,26 @@ class Augment():
                  y_col='class'):
         """
         Constructor Arguments
-        source_path: csv file that is meant to be augmented
-        corpus_: Word corpus that the similarity model should take in
-        Can be either 'none' (for generative model), 'glove', 'fasttext', or 'google'
-        x_col: column name in csv from samples 
-        y_col: column name in csv for labels
+        method (string):
+            valid args:
+                'postag': repalces all words of a given POS-tag in the sentence
+                    with their most similar word vector from a large pre-trained
+                    word embedding
+                'threshold': Loads in a pre-trained word embedding and replaces
+                    words in a sentence with the word vector of highest cosine
+                    similarity
+                'generative': trains a two-layer LSTM network to learn the word
+                    representations of given class. The network then generates
+                    samples of the class by initialising a random start word
+                    and following the LSTM's predictions of the next word given
+                    the previous sequence
+        source_path (string): csv file that is meant to be augmented
+        corpus_ (string): Word corpus that the similarity model should take in
+            valid args: ['none', 'glove', 'fasttext', 'google']
+        x_col (string): column name in csv from samples
+        y_col (string): column name in csv for labels
         """
-      
+
         self.model = get_corpus(corpus_)
         print('Loaded corpus: ', corpus_)
         self.x_col=x_col
@@ -36,7 +49,7 @@ class Augment():
         self.valid_tags = valid_tags
         self.threshold_ = threshold
         # Go through each row in dataframe
-        if method != 'generate': 
+        if method != 'generate':
             for idx, row in self.df.iterrows():
                 x = self.preprocess(row[self.x_col])
                 y = row[self.y_col]
@@ -47,13 +60,12 @@ class Augment():
 
             for elem in aug_temp:
                 self.augmented.loc[augmented.shape[0]] = [x, y]
-
         else:
             self.generate()
-                
+
 
         self.augmented.to_csv(target_path, encoding='utf-8')
-            
+
 
     def preprocess(self, x):
         x = re.sub("[^a-zA-Z ]+", "", x)
@@ -86,8 +98,8 @@ class Augment():
             aug_tweets.append(single_augment)
         print(aug_tweets)
         return aug_tweets
-    
-        
+
+
     def threshold(self, x):
         dict = {}
         n = 0

@@ -4,7 +4,7 @@ from gensim.models.keyedvectors import KeyedVectors
 
 
 def get_corpus(corpus_):
-    """Loads pre-trained word2vec model from src/ directory and 
+    """Loads pre-trained word2vec model from src/ directory and
     returns a gensim word2vec object"""
     if corpus_ == 'google':
         return KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin',
@@ -16,9 +16,9 @@ def get_corpus(corpus_):
         return KeyedVectors.load_word2vec_format('crawl-300d-2M.vec',
                                                  binary=False,
                                                  encoding='UTF-8')
-    
+
 
 
 
 if __name__ == '__main__':
-    model = get_corpus('glove')
+    model = get_corpus('google')
