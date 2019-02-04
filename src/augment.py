@@ -4,7 +4,10 @@ from embedding import get_corpus
 from nltk import pos_tag
 import gensim
 import re
-
+from nltk.corpus import wordnet as wn
+from textgenrnn import textgenrnn
+#from augment import csv_to_txt
+import os
 
 class Augment():
 
@@ -61,7 +64,7 @@ class Augment():
             for elem in aug_temp:
                 self.augmented.loc[augmented.shape[0]] = [x, y]
         else:
-            self.generate()
+            self.generate('hate', 100)
 
 
         self.augmented.to_csv(target_path, encoding='utf-8')
@@ -117,6 +120,40 @@ class Augment():
         return self.create_augmented_samples(dict, n, x)
 
 
+    def generate(self, class_, n_, to_file=False):
+        """
+        Takes in the name of the class and number of samples to be generated.
+        Trains a 2-layer LSTM network to generate new samples of given class
+        and writes them to the target path
+        Args:
+            class_(int): integer denoting the class number from dataframe/csv
+            n_(int): integer denoting the number of new samples to be created
+            toFile(bool): will write to self.target if set to True
+        """
+        df_class = self.df[self.df[y_col] == class_]
+        class_path = 'class_filter.csv'
+        df_class.to_csv(class_path) #write temporary csv file to train RNN instance
+        textgen = textgenrnn(name=self.method)
+        textgen.train_from_file(
+            file_path=class_path,
+            num_epochs=10,
+            batch_size=128,
+            new_model=True,
+            word_level=True
+        )
+
+        #generate new samples
+        if to_file:
+            textgen.generate_to_file(self.target, n=n_, temperature=1.0)
+        else: #will print to screen
+            textgen.generate(n_, temperature=1.0)
+
+        #clean up repo
+        os.remove(class_path)
+        os.remove(self.method+'_config.json')
+        os.remove(self.method+'vocab.json')
+        os.remove(self.method+'_weights.hdf5')
+
 
 if __name__ == '__main__':
-    Augment('postag', 'preprocessed_data.csv', 'augmented_data.csv', 'google')
+    Augment('generate', 'preprocessed_data.csv', 'augmented_data.csv', 'google')
